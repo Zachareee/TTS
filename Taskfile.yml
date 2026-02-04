@@ -2,10 +2,15 @@
 
 version: '3'
 
+vars:
+  EXE_FILE: "main"
+
 tasks:
   configure:
     sources:
       - CMakeLists.txt
+    generates:
+      - build/**
     cmds:
       - cmake -B build -G "Ninja"
     silent: false
@@ -14,7 +19,7 @@ tasks:
     sources:
       - src/**
     generates:
-      - build/**
+      - build/{{.EXE_FILE}}.exe
     deps:
       - configure
     cmds:
@@ -25,5 +30,12 @@ tasks:
     deps:
       - build
     cmds:
-      - build/main.exe
+      - build/{{.EXE_FILE}}.exe
+    silent: false
+
+  clean:
+    if:
+      - test -d build
+    cmds:
+      - rm -rf build
     silent: false
