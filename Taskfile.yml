@@ -3,12 +3,27 @@
 version: '3'
 
 tasks:
-  build:
+  configure:
+    sources:
+      - CMakeLists.txt
     cmds:
       - cmake -B build -G "Ninja"
-      - cmake --build build
-    silent: true
-  default:
+    silent: false
+
+  build:
+    sources:
+      - src/**
+    generates:
+      - build/**
+    deps:
+      - configure
     cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+      - cmake --build build
+    silent: false
+
+  default:
+    deps:
+      - build
+    cmds:
+      - build/main.exe
+    silent: false

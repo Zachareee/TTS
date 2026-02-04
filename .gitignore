@@ -13,6 +13,7 @@
 !/vcpkg.json
 !/vcpkg-configuration.json
 .cache/
+.task/
 
 # fuzzing
 sync_dir*
