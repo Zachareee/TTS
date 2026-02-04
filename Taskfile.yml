@@ -1,0 +1,14 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  build:
+    cmds:
+      - cmake -B build -G "Ninja"
+      - cmake --build build
+    silent: true
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true

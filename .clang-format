@@ -1,0 +1,6 @@
+AlignArrayOfStructures: Right
+BreakBeforeBraces: Allman
+BreakTemplateDeclarations: Yes
+IndentWidth: 4
+NamespaceIndentation: All
+PointerAlignment: Left
