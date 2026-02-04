@@ -1,6 +1,6 @@
 using namespace winrt;
 
-bool select_voice(
+static bool select_voice(
     const Windows::Media::SpeechSynthesis::SpeechSynthesizer& synth)
 {
     for (auto voice : synth.AllVoices())
