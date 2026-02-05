@@ -9,6 +9,7 @@ tasks:
   configure:
     sources:
       - CMakeLists.txt
+      - vcpkg*.json
     generates:
       - build/**
     cmds:

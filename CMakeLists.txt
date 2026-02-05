@@ -16,6 +16,9 @@ target_link_libraries(${TARGET_NAME} PRIVATE WindowsApp.lib)
 find_package(spdlog CONFIG REQUIRED)
 target_link_libraries(${TARGET_NAME} PRIVATE spdlog::spdlog_header_only)
 
+find_package(unofficial-uwebsockets CONFIG REQUIRED)
+target_link_libraries(main PRIVATE unofficial::uwebsockets::uwebsockets)
+
 target_precompile_headers(${TARGET_NAME}
   PRIVATE
     src/pch.h

@@ -1,6 +1,7 @@
 {
   "dependencies": [
     "cppwinrt",
-    "spdlog"
+    "spdlog",
+    "uwebsockets"
   ]
 }

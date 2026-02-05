@@ -7,3 +7,5 @@
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Media.Playback.h>
 #include <winrt/Windows.Media.SpeechSynthesis.h>
+
+#include <uwebsockets/App.h>
