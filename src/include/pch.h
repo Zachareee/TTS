@@ -1,9 +1,7 @@
 #pragma once
-#include <chrono>
 #include <future>
 #include <ppltasks.h>
 #include <queue>
-#include <thread>
 
 #include <spdlog/spdlog.h>
 

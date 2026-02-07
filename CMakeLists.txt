@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.1)
+cmake_minimum_required(VERSION 3.23)
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project(Speech)
@@ -21,7 +21,7 @@ target_link_libraries(main PRIVATE unofficial::uwebsockets::uwebsockets)
 
 target_precompile_headers(${TARGET_NAME}
   PRIVATE
-    src/pch.h
+    src/include/pch.h
 )
 
 target_include_directories(${TARGET_NAME}
