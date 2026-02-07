@@ -1,5 +1,5 @@
-#include <spdlog/spdlog.h>
-#include <string_view>
+#include "queue.h"
+
 using namespace winrt;
 
 static bool
@@ -21,37 +21,56 @@ class PlayerWrapper final
 {
   private:
     Windows::Media::Playback::MediaPlayer m_player{};
+    Windows::Media::SpeechSynthesis::SpeechSynthesizer m_synth{};
 
   public:
-    PlayerWrapper(auto lambda)
+    PlayerWrapper(concurrent_queue<std::string>* q)
     {
-        m_player.AutoPlay(true);
-        m_player.MediaEnded(lambda);
-    }
-    ~PlayerWrapper() { m_player.Close(); }
+        winrt::init_apartment();
 
-    void speak(const Windows::Media::SpeechSynthesis::SpeechSynthesizer& synth,
-               auto message)
+        if (!select_voice(m_synth))
+        {
+            spdlog::error("Ayumi not found");
+        }
+
+        m_player.AutoPlay(true);
+
+        m_player.MediaEnded(
+            [&](auto...)
+            {
+                std::string msg;
+                q->wait_and_pop(msg);
+                this->speak(msg);
+            });
+
+        this->speak("");
+    }
+    ~PlayerWrapper()
     {
-        m_player.SetStreamSource(
-            synth.SynthesizeTextToStreamAsync(to_hstring(message)).get());
+        spdlog::error("PlayerWrapper dropped");
+        m_player.Close();
+    }
+
+    void speak(auto message)
+    {
+        m_player.SetStreamSource(m_synth.SynthesizeTextToStreamAsync(to_hstring(message)).get());
     }
 };
 
+[[noreturn]] static void thread_job(concurrent_queue<std::string>* q)
+{
+    PlayerWrapper player{q};
+    while (true)
+    {
+    // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
 int main()
 {
-    Windows::Media::SpeechSynthesis::SpeechSynthesizer synth{};
-    if (!select_voice(synth))
-    {
-        spdlog::error("Ayumi not found");
-        return 1;
-    }
+    concurrent_queue<std::string> queue{};
 
-    std::promise<void> p{};
-    std::future<void> future{p.get_future()};
-    p.set_value();
-
-    PlayerWrapper player{[&](auto...) { p.set_value(); }};
+    std::thread player_thread{thread_job, &queue};
 
     uWS::App app{};
 
@@ -60,11 +79,8 @@ int main()
             {
                 auto message{req->getQuery("text")};
                 spdlog::info("message is: {}", message);
-                future.get();
 
-                p = {};
-                future = p.get_future();
-                player.speak(synth, message);
+                queue.push(std::string{message});
                 res->end("Done");
             })
         .listen(8000,

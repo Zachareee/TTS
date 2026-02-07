@@ -24,6 +24,11 @@ target_precompile_headers(${TARGET_NAME}
     src/pch.h
 )
 
+target_include_directories(${TARGET_NAME}
+  PRIVATE
+    src/include
+)
+
 target_sources(${TARGET_NAME}
   PRIVATE
     src/main.cpp
