@@ -47,7 +47,7 @@ class PlayerWrapper final
 
     ~PlayerWrapper()
     {
-        spdlog::error("PlayerWrapper dropped");
+        spdlog::info("PlayerWrapper dropped");
         m_player.Close();
     }
 

@@ -19,14 +19,21 @@ int main()
                 spdlog::info("message is: {}", message);
 
                 queue.push(std::string{message});
-                res->end("Done");
+                res->end("Ok");
             })
         .get("/skip",
              [&](uWS::HttpResponse<false>* res, auto...)
              {
                  spdlog::info("message skipped");
                  player.speak("");
-                 res->end("Done");
+                 res->end("Ok");
+             })
+        .get("/close",
+             [&](uWS::HttpResponse<false>* res, auto...)
+             {
+                 spdlog::warn("shutting down");
+                 res->end("Ok");
+                 us_listen_socket_close(0, sock);
              })
         .listen(port,
                 [](us_listen_socket_t* listenSocket)
