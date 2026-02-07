@@ -21,6 +21,13 @@ int main()
                 queue.push(std::string{message});
                 res->end("Done");
             })
+        .get("/skip",
+             [&](uWS::HttpResponse<false>* res, auto...)
+             {
+                 spdlog::info("message skipped");
+                 player.speak("");
+                 res->end("Done");
+             })
         .listen(port,
                 [](us_listen_socket_t* listenSocket)
                 {
