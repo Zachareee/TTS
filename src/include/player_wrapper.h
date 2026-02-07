@@ -38,13 +38,13 @@ class PlayerWrapper final
         m_player.MediaEnded(
             [&](auto...)
             {
-                std::string msg;
-                q.wait_and_pop(msg);
+                std::string msg{q.wait_and_pop()};
                 this->speak(msg);
             });
 
         this->speak("");
     }
+
     ~PlayerWrapper()
     {
         spdlog::error("PlayerWrapper dropped");

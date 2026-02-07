@@ -39,7 +39,7 @@ class concurrent_queue
         return true;
     }
 
-    void wait_and_pop(Data& popped_value)
+    Data wait_and_pop()
     {
         std::unique_lock<std::mutex> lock{the_mutex};
         while (the_queue.empty())
@@ -47,7 +47,9 @@ class concurrent_queue
             the_condition_variable.wait(lock);
         }
 
-        popped_value = the_queue.front();
+        Data popped_value{the_queue.front()};
         the_queue.pop();
+
+        return popped_value;
     }
 };
