@@ -1,6 +1,6 @@
 # https://taskfile.dev
 
-version: '3'
+version: "3"
 
 vars:
   EXE_FILE: "main"
@@ -35,8 +35,7 @@ tasks:
     silent: false
 
   clean:
-    if:
-      - test -d build
+    if: test -d build
     cmds:
       - rm -rf build
     silent: false
